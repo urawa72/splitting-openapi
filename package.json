@@ -1,0 +1,16 @@
+{
+  "name": "splitting-openapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "swagger-ui": "bash scripts/swagger-ui.sh",
+    "bundle": "bash scripts/bundle.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4"
+  }
+}
