@@ -1,0 +1,591 @@
+openapi: 3.0.2
+info:
+  contact:
+    email: apiteam@swagger.io
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [http://swagger.io](http://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.6
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://localhost:3000
+tags:
+- description: Everything about your Pets
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+  name: pet
+- description: Operations about user
+  name: store
+paths:
+  /pet:
+    post:
+      description: Add a new pet to the store
+      operationId: addPet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pet'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/pet'
+        description: Create a new pet in the store
+        required: true
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pet'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+          description: Successful operation
+        "405":
+          description: Invalid input
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Add a new pet to the store
+      tags:
+      - pet
+    put:
+      description: Update an existing pet by Id
+      operationId: updatePet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pet'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/pet'
+        description: Update an existent pet in the store
+        required: true
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pet'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        "405":
+          description: Validation exception
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Update an existing pet
+      tags:
+      - pet
+  /pet/findByStatus:
+    get:
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findPetsByStatus
+      parameters:
+      - description: Status values that need to be considered for filter
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          default: available
+          enum:
+          - available
+          - pending
+          - sold
+          type: string
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/pet'
+                type: array
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/pet'
+                type: array
+          description: successful operation
+        "400":
+          description: Invalid status value
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Finds Pets by status
+      tags:
+      - pet
+  /pet/findByTags:
+    get:
+      description: Multiple tags can be provided with comma separated strings. Use
+        tag1, tag2, tag3 for testing.
+      operationId: findPetsByTags
+      parameters:
+      - description: Tags to filter by
+        explode: true
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/pet'
+                type: array
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/pet'
+                type: array
+          description: successful operation
+        "400":
+          description: Invalid tag value
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Finds Pets by tags
+      tags:
+      - pet
+  /pet/{petId}:
+    delete:
+      description: ""
+      operationId: deletePet
+      parameters:
+      - description: ""
+        in: header
+        name: api_key
+        required: false
+        schema:
+          type: string
+      - description: Pet id to delete
+        in: path
+        name: petId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "400":
+          description: Invalid pet value
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Deletes a pet
+      tags:
+      - pet
+    get:
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+      - description: ID of pet to return
+        in: path
+        name: petId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pet'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+          description: successful operation
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+      security:
+      - api_key: []
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Find pet by ID
+      tags:
+      - pet
+    post:
+      description: ""
+      operationId: updatePetWithForm
+      parameters:
+      - description: ID of pet that needs to be updated
+        in: path
+        name: petId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Name of pet that needs to be updated
+        in: query
+        name: name
+        schema:
+          type: string
+      - description: Status of pet that needs to be updated
+        in: query
+        name: status
+        schema:
+          type: string
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: Updates a pet in the store with form data
+      tags:
+      - pet
+  /pet/{petId}/uploadImage:
+    post:
+      description: ""
+      operationId: uploadFile
+      parameters:
+      - description: ID of pet to update
+        in: path
+        name: petId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: Additional Metadata
+        in: query
+        name: additionalMetadata
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-response'
+          description: successful operation
+      security:
+      - petstore_auth:
+        - write:pets
+        - read:pets
+      summary: uploads an image
+      tags:
+      - pet
+  /store/inventory:
+    get:
+      description: Returns a map of status codes to quantities
+      operationId: getInventory
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  format: int32
+                  type: integer
+                type: object
+          description: successful operation
+      security:
+      - api_key: []
+      summary: Returns pet inventories by status
+      tags:
+      - store
+  /store/order:
+    post:
+      description: Place a new order in the store
+      operationId: placeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/order'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+          description: successful operation
+        "405":
+          description: Invalid input
+      summary: Place an order for a pet
+      tags:
+      - store
+  /store/order/{orderId}:
+    get:
+      description: For valid response try integer IDs with value <= 5 or > 10. Other
+        values will generated exceptions
+      operationId: getOrderById
+      parameters:
+      - description: ID of order that needs to be fetched
+        in: path
+        name: orderId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/order'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+          description: successful operation
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Order not found
+      summary: Find purchase order by ID
+      tags:
+      - store
+components:
+  requestBodies:
+    Pet:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/pet'
+      description: Pet object that needs to be added to the store
+    UserArray:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/user'
+            type: array
+      description: List of user object
+  schemas:
+    pet:
+      example:
+        photoUrls:
+        - photoUrls
+        - photoUrls
+        name: doggie
+        id: 10
+        category:
+          name: Dogs
+          id: 1
+        tags:
+        - name: name
+          id: 0
+        - name: name
+          id: 0
+        status: available
+      properties:
+        id:
+          example: 10
+          format: int64
+          type: integer
+        name:
+          example: doggie
+          type: string
+        category:
+          $ref: '#/components/schemas/category'
+        photoUrls:
+          items:
+            type: string
+            xml:
+              name: photoUrl
+          type: array
+          xml:
+            wrapped: true
+        tags:
+          items:
+            $ref: '#/components/schemas/tag'
+          type: array
+          xml:
+            wrapped: true
+        status:
+          description: pet status in the store
+          enum:
+          - available
+          - pending
+          - sold
+          type: string
+      required:
+      - name
+      - photoUrls
+      type: object
+      xml:
+        name: pet
+    api-response:
+      example:
+        code: 0
+        type: type
+        message: message
+      properties:
+        code:
+          format: int32
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
+      type: object
+      xml:
+        name: '##default'
+    order:
+      example:
+        petId: 198772
+        quantity: 7
+        id: 10
+        shipDate: 2000-01-23T04:56:07.000+00:00
+        complete: true
+        status: approved
+      properties:
+        id:
+          example: 10
+          format: int64
+          type: integer
+        petId:
+          example: 198772
+          format: int64
+          type: integer
+        quantity:
+          example: 7
+          format: int32
+          type: integer
+        shipDate:
+          format: date-time
+          type: string
+        status:
+          description: Order Status
+          enum:
+          - placed
+          - approved
+          - delivered
+          example: approved
+          type: string
+        complete:
+          type: boolean
+      type: object
+      xml:
+        name: order
+    user:
+      properties:
+        id:
+          example: 10
+          format: int64
+          type: integer
+        username:
+          example: theUser
+          type: string
+        firstName:
+          example: John
+          type: string
+        lastName:
+          example: James
+          type: string
+        email:
+          example: john@email.com
+          type: string
+        password:
+          example: "12345"
+          type: string
+        phone:
+          example: "12345"
+          type: string
+        userStatus:
+          description: User Status
+          example: 1
+          format: int32
+          type: integer
+      type: object
+      xml:
+        name: user
+    category:
+      example:
+        name: Dogs
+        id: 1
+      properties:
+        id:
+          example: 1
+          format: int64
+          type: integer
+        name:
+          example: Dogs
+          type: string
+      type: object
+      xml:
+        name: category
+    tag:
+      example:
+        name: name
+        id: 0
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+      type: object
+      xml:
+        name: tag
+  securitySchemes:
+    petstore_auth:
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+      type: oauth2
+    api_key:
+      in: header
+      name: api_key
+      type: apiKey

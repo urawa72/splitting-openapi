@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "swagger-ui": "bash scripts/swagger-ui.sh",
-    "bundle": "bash scripts/bundle.sh"
+    "generate": "bash scripts/generate.sh",
+    "swagger-ui": "bash scripts/swagger-ui.sh"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@apidevtools/swagger-cli": "^4.0.4"
+    "@stoplight/spectral-cli": "6.0.0"
   }
 }
